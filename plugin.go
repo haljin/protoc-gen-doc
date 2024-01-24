@@ -2,15 +2,15 @@ package gendoc
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path"
 	"path/filepath"
 	"regexp"
 	"strings"
 
-	"github.com/golang/protobuf/proto"
 	plugin_go "github.com/golang/protobuf/protoc-gen-go/plugin"
 	"github.com/pseudomuto/protokit"
+	"google.golang.org/protobuf/proto"
 )
 
 // PluginOptions encapsulates options for the plugin. The type of renderer, template file, and the name of the output
@@ -42,7 +42,7 @@ func (p *Plugin) Generate(r *plugin_go.CodeGeneratorRequest) (*plugin_go.CodeGen
 	customTemplate := ""
 
 	if options.TemplateFile != "" {
-		data, err := ioutil.ReadFile(options.TemplateFile)
+		data, err := os.ReadFile(options.TemplateFile)
 		if err != nil {
 			return nil, err
 		}

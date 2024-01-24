@@ -9,6 +9,8 @@ import (
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
 	"github.com/pseudomuto/protoc-gen-doc/extensions"
 	"github.com/pseudomuto/protokit"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 // Template is a type for encapsulating all the parsed files, messages, fields, enums, services, extensions, etc. into
@@ -106,9 +108,9 @@ type commonOptions interface {
 	GetDeprecated() bool
 }
 
-func extractOptions(opts commonOptions) map[string]interface{} {
+func extractOptions(opts protoreflect.ProtoMessage) map[string]interface{} {
 	out := make(map[string]interface{})
-	if opts.GetDeprecated() {
+	if opts.(commonOptions).GetDeprecated() {
 		out["deprecated"] = true
 	}
 	switch opts := opts.(type) {
@@ -117,6 +119,12 @@ func extractOptions(opts commonOptions) map[string]interface{} {
 			out["idempotency_level"] = opts.IdempotencyLevel.String()
 		}
 	}
+
+	extensionOptionsJson, _ := protojson.Marshal(opts)
+	extMap := make(map[string]interface{})
+	json.Unmarshal(extensionOptionsJson, &extMap)
+
+	out = mergeOptions(out, extMap)
 	return out
 }
 
@@ -503,6 +511,7 @@ func parseMessageField(pf *protokit.FieldDescriptor, oneofDecls []*descriptor.On
 }
 
 func parseService(ps *protokit.ServiceDescriptor) *Service {
+
 	service := &Service{
 		Name:        ps.GetName(),
 		LongName:    ps.GetLongName(),

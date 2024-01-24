@@ -1,10 +1,10 @@
-FROM alpine:3.15.0
+FROM alpine:3.19
 WORKDIR /
 
 RUN apk --update add bash protoc protobuf-dev && rm -rf /var/cache/apk/*
 
 COPY LICENSE.md README.md script/entrypoint.sh ./
-COPY protoc-gen-doc /usr/bin/
+COPY bin/protoc-gen-doc /usr/bin/
 
 VOLUME ["/out"]
 VOLUME ["/protos"]

@@ -1,6 +1,10 @@
 module github.com/pseudomuto/protoc-gen-doc
 
-go 1.17
+go 1.21
+
+toolchain go1.21.6
+
+replace github.com/pseudomuto/protokit => ../protokit
 
 require (
 	github.com/Masterminds/semver v1.4.2 // indirect
@@ -24,7 +28,7 @@ require (
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	golang.org/x/crypto v0.1.0 // indirect
-	google.golang.org/protobuf v1.27.1 // indirect
+	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0 // indirect
